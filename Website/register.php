@@ -38,7 +38,7 @@ if(!empty($_POST)){
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>GBAF</title>
@@ -48,7 +48,7 @@ if(!empty($_POST)){
     <body>
            <div id="frame">
                <header>
-                   <img src="img/logo.png">
+                   <img src="img/logo.png" alt="logo">
                </header>
                <section id="content">
             
@@ -81,7 +81,7 @@ if(!empty($_POST)){
                         <label>Réponse : <span class="ast">*</span></label>
                             <input type="text" placeholder="Entre votre réponse" name="reponse"  required>
                            <p>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</p>
-                           <input type="submit" id='submit' name="register "value="VALIDER" >
+                           <input type="submit" id='submit' name="register" value="VALIDER" >
                 </form>
                        
                        

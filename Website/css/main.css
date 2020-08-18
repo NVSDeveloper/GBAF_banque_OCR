@@ -206,6 +206,7 @@ nav>a>img {
 #detail_actor>a, #detail_actor>p {
     margin: auto;
     padding: 1em;
+    margin-bottom: 2em;
     
 }
 
@@ -254,6 +255,9 @@ nav>a>img {
     margin: 1em;
 }
 
+#comment h2{
+    padding-left: 1em;
+}
 h4{
     padding: 0;
     margin: 0;

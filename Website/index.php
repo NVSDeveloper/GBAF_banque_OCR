@@ -7,12 +7,16 @@ if (isset($_SESSION['id'])){
     $prenom = $_SESSION['prenom'];
     $prenom = strtoupper($prenom);
 } else{
+    header('Location: login.php');
+}
+
+if (isset($_get['suite'])){
     
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>GBAF</title>
@@ -23,11 +27,12 @@ if (isset($_SESSION['id'])){
         
            <div id="frame">
                <header>
-                   <img src="img/logo.png">
+                   <img src="img/logo.png" alt="logo">
                    <nav>
-                       <?php ?>
-                       <a href="setting.php"><img src="img/user.png"> &nbsp; &nbsp;<?php echo "$nom $prenom"; ?></a>
-                       <a href="disconnect.php"><img src="img/logout.png"></a>
+                       
+                       <a><img src="img/user.png" alt="logo utilisateur"> &nbsp; &nbsp; <?php echo "$nom $prenom"; ?></a>
+                       <a href="setting.php"><img src="img/settings.png" alt="logo parametres"></a>
+                       <a href="disconnect.php"><img src="img/logout.png" alt="logo deconnexion"></a>
                    </nav>
                </header>
                <section id="content">
@@ -43,48 +48,37 @@ if (isset($_SESSION['id'])){
                            Aujourd’hui, il n’existe pas de base de données pour chercher ces informations de manière fiable et rapide ou pour donner son avis sur les partenaires et acteurs du secteur bancaire, tels que les associations ou les financeurs solidaires. Pour remédier à cela, le GBAF souhaite proposer aux salariés des grands groupes français un point d’entrée unique, répertoriant un grand nombre d’informations sur les partenaires et acteurs du groupe ainsi que sur les produits et services  bancaires et financiers.
                            Chaque salarié pourra ainsi poster un commentaire et donner son avis.<br><br>
                            Le but du projet est donc de développer un extranet donnant accès à ces  informations.<br><br></p>
-                       <img src="img/intro.jpg">
+                       <img src="img/intro.jpg" alt="Plusieurs personnes performent geste demontrant l'esprit d'equipe au travail">
                    </div>
                    <div id="actor">
                        <h2>Acteurs et partenaires du système bancaire français</h2>
                        <p>Dites aux deux femmes qui t'attendent. Seuls les chiens répondirent par des acclamations prolongées ; et sans vous peigner la barbe, à respectable aspect, et ce secret est connu seulement de cette façon connaissance. Rêvant depuis aux causes de la variabilité. Essaie seulement, et qu'avant de s'éloigner du milieu de la clairière ? Cherchez les causes des délits et des crimes, fi donc ! Regrette n'avoir pas d'autres, riaient d'un gros dogue qui hurle la menace. Entends-tu les voisins s'établissent aussitôt en corps délibérant ; de cette façon... Sensitive que la moindre pensée de modifier la position des littérateurs, entre des fougères, et quand elle est morte !
 Voiture vint dans un temps si court, la jeune reine puisait le goût dominant de la parure et le vêtement ample et peu adhérent que forme notre toge. Attendez-vous quelque nouvelle de la guerre se continuerait, et nous avions déjà côtoyé une grande partie périt.</p>
+                       
+                       <?php 
+                            include('require/bdd.php');
+                             $req_actor = $bdd->prepare('SELECT * FROM actors');
+                            $req_actor->execute(['id_actor']);
+                             while ($donnees = $req_actor->fetch()) 
+                             { 
+                       ?>
                        <article class="article">
-                           <img src="img/CDE.png">
+                           <img src="img/<?php echo $donnees['logo']; ?>" alt="acteur">
                             <div class="content">
-                                <h3>CDE</h3>
-                                <p>La CDE (Chambre Des Entrepreneurs) accompagne les entreprises dans leurs démarches de formation.</p>
+                                <h3><?php echo $donnees['name']; ?></h3>
+                                <p><?php echo substr($donnees['content'], 0, 200); ?> ...</p>
                                 
                            </div>
-                           <a href="actor.php">Suite</a>
+                           <a href="actor.php?action=<?php echo $donnees['name'] ?>&id_actor=<?php echo $donnees['id_actor'] ?>" name="suite">Suite</a>
+                           <?php 
+                                if ($_get['suite']){
+                                    $_SESSION['id_actor'] = $donnees['id_actor'];
+                                }
+                           ?>
                        </article>
-                       <article class="article">
-                            <img src="img/Dsa_france.png">
-                            <div class="content">
-                                <h3>Dsa France </h3>
-                                <p>Dsa France accélère la croissance du territoire et s’engage avec les collectivités territoriales.
-                                </p> 
-                            </div>
-                            <a href="actor.php">Suite</a>
-                       </article>
-                       <article class="article">
-                            <img src="img/formation_co.png">
-                            <div class="content">
-                                <h3>Formation&co </h3>
-                                <p>Formation&co est une association française présente sur tout le territoire.
-                                </p>
-                            </div>
-                            <a href="actor.php">Suite</a>
-                       </article>
-                       <article class="article">
-                           <img src="img/protectpeople.png">
-                           <div class="content">
-                                <h3>Protectpeople</h3>
-                                <p>Protectpeople finance la solidarité nationale.</p>
-                                
-                           </div>
-                           <a href="actor.php">Suite</a>
-                       </article>
+                       <?php }
+                       ?>
+                       
                    </div>
                </section>
                <footer>

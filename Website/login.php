@@ -36,7 +36,7 @@ if (!isset($_SESSION['id'])){
   
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>GBAF</title>
@@ -46,7 +46,7 @@ if (!isset($_SESSION['id'])){
     <body>
            <div id="frame">
                <header>
-                   <img src="img/logo.png">
+                   <img src="img/logo.png" alt="logo">
                </header>
                <section id="content">
                    <div class="champs">
