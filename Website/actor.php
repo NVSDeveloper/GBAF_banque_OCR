@@ -2,19 +2,63 @@
 session_start();
 include('require/bdd.php');
 if (isset($_SESSION['id'])){
+    $id_user = $_SESSION['id'];
     $nom = $_SESSION['nom'];
     $nom = strtoupper($nom);
     $prenom = $_SESSION['prenom'];
     $prenom = strtoupper($prenom);
     $id_actor = $_GET['id_actor'];
+    $push = $_GET['push'];
     
 } else{
     header('Location: login.php');
 }
+//Requete vote déja réaliser
+$req_like_done = $bdd->prepare("SELECT * FROM vote WHERE id_actor = ? AND id_user = ? ");
+$req_like_done->execute([$id_actor,$id_user]);
+$occ = $req_like_done->RowCount();
 
 
-    $req_actor = $bdd->prepare("SELECT * FROM actors WHERE id_actor = '$id_actor'");
-    $req_actor->execute(['id_actor']);
+if ($_GET['push'] == 'like' && $occ === 0){
+    
+$req_like = $bdd->prepare("INSERT INTO vote(id_user, id_actor, vote) VALUE (:id_user, :id_actor, :vote)");
+$req_like->execute(array('id_user' => $_SESSION['id'],'id_actor' => $id_actor,'vote' => 1));
+    //header("Location: ".$_SERVER['REQUEST_URI']);
+}
+
+
+if ($_GET['push'] == 'dislike' && $occ === 0){
+   
+$req_dislike =  $bdd->prepare("INSERT INTO vote(id_user, id_actor, vote) VALUE (:id_user, :id_actor, :vote)");
+$req_dislike->execute(array('id_user' => $_SESSION['id'],'id_actor' => $id_actor,'vote' => 2));
+   
+}
+//Requete vote déja réaliser
+$req_like_done = $bdd->prepare("SELECT * FROM vote WHERE id_actor = ? AND id_user = ? ");
+$req_like_done->execute([$id_actor,$id_user]);
+$occ = $req_like_done->RowCount();
+
+
+// Requete nombres likes
+$req_like = $bdd->prepare("SELECT * FROM vote WHERE vote = 1 AND id_actor = ? ");
+$req_like->execute([$id_actor]);
+$like = $req_like->RowCount();
+
+
+
+// Requete nombres dislikes
+$req_dislike = $bdd->prepare("SELECT * FROM vote WHERE vote = 2 AND id_actor = ? ");
+$req_dislike->execute([$id_actor]);
+$dislike = $req_dislike->RowCount();
+
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,20 +101,35 @@ if (isset($_SESSION['id'])){
                        <div id="top-comment">
                            <?php 
                             include('require/bdd.php');
-                            $requete = $bdd->prepare("SELECT COUNT(id_comment) FROM Comments");
+                            $requete = $bdd->prepare("SELECT COUNT(id_comment) FROM Comments WHERE id_actor = '$id_actor'");
                             $requete->execute();
                             
                        while ($occurancy = $requete->fetch()) {
 
                        ?>
                        <h2><?php echo $occurancy[0];?> COMMENTAIRES</h2>
-                           <?php }?>
+                           <?php } ?>
+                           
                         <div id="reaction">
-                       <input type="button" value="Nouveau"> <!-- bouton qui rend visible l'encart nouveau commentaire -->
-                       <p>nb+</p>
-                       
-                       <p>nb-</p><!--like dislike-->
-                       <!-- countdown nombre de dislike-->
+                            <a class="button" href="comment.php?id_actor=<?php echo $id_actor ?>"> NOUVEAU</a> <!-- bouton qui rend visible l'encart nouveau commentaire -->
+                            <?php
+                                
+                            
+                            if($occ == 0){
+                                
+                            ?>
+                       <a href="actor.php?id_actor=<?php echo $id_actor ?>&push=like" name="like"><img src="img/like.png"></a><p><?php echo $like;?></p>
+                            
+                        <a href="actor.php?id_actor=<?php echo $id_actor ?>&push=dislike" name="dislike"><img src="img/dislike.png"></a><p><?php echo $dislike;?></p>
+                            
+                       <?php }else{
+                                
+                            ?>
+                         <a ><img src="img/like.png"></a><p><?php echo $like;?></p>
+                            
+                        <a><img src="img/dislike.png"></a><p><?php echo $dislike;?></p>
+                            
+                         <?php }   ?>
                             </div>
                         </div>
                        <div id="last-comment">

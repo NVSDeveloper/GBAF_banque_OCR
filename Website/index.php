@@ -10,11 +10,7 @@ if (isset($_SESSION['id'])){
     header('Location: login.php');
 }
 
-if (isset($_get['suite'])){
-    
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -69,12 +65,8 @@ Voiture vint dans un temps si court, la jeune reine puisait le goût dominant de
                                 <p><?php echo substr($donnees['content'], 0, 200); ?> ...</p>
                                 
                            </div>
-                           <a href="actor.php?action=<?php echo $donnees['name'] ?>&id_actor=<?php echo $donnees['id_actor'] ?>" name="suite">Suite</a>
-                           <?php 
-                                if ($_get['suite']){
-                                    $_SESSION['id_actor'] = $donnees['id_actor'];
-                                }
-                           ?>
+                           <a href="actor.php?id_actor=<?php echo $donnees['id_actor'] ?>" name="suite">Suite</a>
+                           
                        </article>
                        <?php }
                        ?>

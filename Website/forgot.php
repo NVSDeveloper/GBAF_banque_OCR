@@ -1,10 +1,26 @@
 <?php
-session_start();
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 include('require/bdd.php');
-if (isset($_SESSION['id'])){
-
-    header('Location: index.php');
-} 
+session_start();
+if (!isset($_SESSION['id'])){
+    if (!empty($_POST['forgot'])) {
+        
+    $username = htmlspecialchars(trim($_POST["username"]));
+    $req_user = $bdd->prepare("SELECT username FROM account WHERE username = ?");
+    $req_user->execute([$username]);
+    $result = $req_user->fetch();
+        
+    if ($username == $result['username']){
+        
+            $_SESSION['username'] = $result['username'];
+            header('Location: forgot2.php');
+            
+        }else{
+        echo 'Mauvais identifiant ou mot de passe';
+    }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,11 +38,12 @@ if (isset($_SESSION['id'])){
                <section id="content">
                    <div class="champs">
                        <h1>MOT DE PASSE OUBLIE</h1>
-                       <form>
+                       
+                       <form method="post">
                        <label>Nom d'utilisateur : <span class="ast">*</span></label>
-                       <input type="text" >
+                       <input type="text" name="username" required>
                            <label>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</label>
-                           <input type="submit" id='submit' value='SUIVANT' >
+                           <input type="submit" id='submit' name="forgot" value='SUIVANT' >
                            
                         <a href="register.php">S'inscrire</a>
                         <a href="login.php">Connexion</a>

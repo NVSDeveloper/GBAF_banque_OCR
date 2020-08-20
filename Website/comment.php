@@ -1,10 +1,36 @@
 <?php
 session_start();
 include('require/bdd.php');
-if (!isset($_SESSION['id'])){
-
+if (isset($_SESSION['id'])){
+    $id_user = $_SESSION['id'];
+    $nom = $_SESSION['nom'];
+    $nom = strtoupper($nom);
+    $prenom = $_SESSION['prenom'];
+    $prenom = strtoupper($prenom);
+    $id_actor = $_GET['id_actor'];
+    
+    } else{
     header('Location: login.php');
-}   
+}  
+
+    if(isset($_POST['submit_commentaire'])) {
+      if(isset($_POST['commentaire']) AND !empty($_POST['commentaire'])) {
+         $commentaire = htmlspecialchars($_POST['commentaire']);
+          
+         if(strlen($commentaire) < 255) {
+            $ins = $bdd->prepare('INSERT INTO Comments (id_user, id_actor, comment) VALUES (?,?,?)');
+            $ins->execute(array($id_user, $id_actor, $commentaire));
+            
+         } else {
+            $c_msg = "Erreur: Le ommentaire doit faire moins de 255 caractères";
+         }
+      } else {
+         $c_msg = "Erreur: Le champs commentaire doit être complété";
+      }
+        header('Location: confirmation.php');
+             exit;
+   }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,20 +39,29 @@ if (!isset($_SESSION['id'])){
         <title>GBAF</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
         <link rel="stylesheet"  type="text/css" href="css/offline.css">
+        <link rel="stylesheet"  type="text/css" href="css/main.css">
+        
     </head>
     <body>
-           <div id="frame">
+           <div id="frame" class="no-frame">
                <header>
-                   <img src="img/logo.png">
+                   <img src="img/logo.png" alt="logo">
+               <nav>
+                       
+                       <a><img src="img/user.png" alt="logo utilisateur"> &nbsp; &nbsp; <?php echo "$nom $prenom"; ?></a>
+                       <a href="setting.php"><img src="img/settings.png" alt="logo parametres"></a>
+                       <a href="disconnect.php"><img src="img/logout.png" alt="logo deconnexion"></a>
+                   </nav>
                </header>
-               <section id="content">
-                   <div class="champs">
+               <section id="commentaire">
+                   <div id="content">
                        <h1>COMMENTAIRE</h1>
-                       <textarea></textarea>
-                       <form>
-                        
-                           <input type="submit" id='submit' value='VALIDER' >
-                        </form>
+                       	<form method="POST">
+                            <p><?php echo "$id_user $id_actor"; ?></p>
+                            
+   <textarea name="commentaire" placeholder="Votre commentaire..."></textarea><br />
+   <input type="submit" value="Poster mon commentaire" name="submit_commentaire" />
+</form>
                    </div>
                </section>
                <footer>
