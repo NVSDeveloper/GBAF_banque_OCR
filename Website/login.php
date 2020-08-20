@@ -52,12 +52,12 @@ if (!isset($_SESSION['id'])){
                    <div class="champs">
                        <h1>CONNEXION</h1>
                        <form action="login.php" method="post">
-                       <label>Nom d'utilisateur : <span class="ast">*</span></label>
-                       <input type="text" name="username" required>
-                       <label>Mot de passe : <span class="ast">*</span></label>
-                       <input type="password" name="password" required>
-                           <label>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</label>
-                           <input type="submit" id='submit' value='CONNEXION' >
+                       <label>Nom d'utilisateur : <span class="ast">*</span></label><br>
+                       <input type="text" name="username" required><br>
+                       <label>Mot de passe : <span class="ast">*</span></label><br>
+                       <input type="password" name="password" required><br>
+                           <label>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</label><br>
+                           <input type="submit" id='submit' value='CONNEXION' ><br>
                            
                                
                         <a href="register.php">S'inscrire</a>

@@ -62,7 +62,7 @@ Voiture vint dans un temps si court, la jeune reine puisait le goût dominant de
                            <img src="img/<?php echo $donnees['logo']; ?>" alt="acteur">
                             <div class="content">
                                 <h3><?php echo $donnees['name']; ?></h3>
-                                <p><?php echo substr($donnees['content'], 0, 200); ?> ...</p>
+                                <p><?php echo substr($donnees['content'], 0, 100); ?> ...</p>
                                 
                            </div>
                            <a href="actor.php?id_actor=<?php echo $donnees['id_actor'] ?>" name="suite">Suite</a>

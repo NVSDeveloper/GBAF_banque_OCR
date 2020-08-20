@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 session_start();
 include('require/bdd.php');
 if (isset($_SESSION['id'])){
@@ -8,7 +10,11 @@ if (isset($_SESSION['id'])){
     $prenom = $_SESSION['prenom'];
     $prenom = strtoupper($prenom);
     $id_actor = $_GET['id_actor'];
-    $push = $_GET['push'];
+   if(isset($_GET['push'])) {
+       $push = $_GET['push'];
+   }else{
+       $push = NULL;
+   }
     
 } else{
     header('Location: login.php');
@@ -19,7 +25,7 @@ $req_like_done->execute([$id_actor,$id_user]);
 $occ = $req_like_done->RowCount();
 
 
-if ($_GET['push'] == 'like' && $occ === 0){
+if ($push == 'like' && $occ === 0){
     
 $req_like = $bdd->prepare("INSERT INTO vote(id_user, id_actor, vote) VALUE (:id_user, :id_actor, :vote)");
 $req_like->execute(array('id_user' => $_SESSION['id'],'id_actor' => $id_actor,'vote' => 1));
@@ -27,7 +33,7 @@ $req_like->execute(array('id_user' => $_SESSION['id'],'id_actor' => $id_actor,'v
 }
 
 
-if ($_GET['push'] == 'dislike' && $occ === 0){
+if ($push == 'dislike' && $occ === 0){
    
 $req_dislike =  $bdd->prepare("INSERT INTO vote(id_user, id_actor, vote) VALUE (:id_user, :id_actor, :vote)");
 $req_dislike->execute(array('id_user' => $_SESSION['id'],'id_actor' => $id_actor,'vote' => 2));
@@ -50,15 +56,6 @@ $like = $req_like->RowCount();
 $req_dislike = $bdd->prepare("SELECT * FROM vote WHERE vote = 2 AND id_actor = ? ");
 $req_dislike->execute([$id_actor]);
 $dislike = $req_dislike->RowCount();
-
-
-
-
-
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,8 +79,13 @@ $dislike = $req_dislike->RowCount();
                <section id="content">
                    <?php 
                             include('require/bdd.php');
-                             $req_actor = $bdd->prepare("SELECT * FROM actors WHERE id_actor = '$id_actor'");
-                             $req_actor->execute(['id_actor']);
+                             $req_actor = $bdd->prepare("SELECT * FROM actors WHERE id_actor = ?");
+                            $req_actor->bindValue(1, $id_actor, PDO::PARAM_INT);
+                             $req_actor->execute();
+                   if($req_actor->rowCount() < 1){
+                      header('Location: 404.php');
+                       
+                   }
                              while ($donnees = $req_actor->fetch()) 
                              { 
                        ?>
@@ -108,10 +110,15 @@ $dislike = $req_dislike->RowCount();
 
                        ?>
                        <h2><?php echo $occurancy[0];?> COMMENTAIRES</h2>
-                           <?php } ?>
+                           <?php }?>
                            
                         <div id="reaction">
-                            <a class="button" href="comment.php?id_actor=<?php echo $id_actor ?>"> NOUVEAU</a> <!-- bouton qui rend visible l'encart nouveau commentaire -->
+                            <form method="post" action="comment.php">
+                                <input type="hidden" value="<?php echo $id_actor ?>" name="id_actor">
+                                <button class="button" type="submit" name="new">
+                                NOUVEAU</button>
+                            </form>
+                            
                             <?php
                                 
                             

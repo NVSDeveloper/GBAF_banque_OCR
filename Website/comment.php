@@ -7,13 +7,14 @@ if (isset($_SESSION['id'])){
     $nom = strtoupper($nom);
     $prenom = $_SESSION['prenom'];
     $prenom = strtoupper($prenom);
-    $id_actor = $_GET['id_actor'];
+    $id_actor = $_POST['id_actor'];
     
     } else{
     header('Location: login.php');
 }  
 
     if(isset($_POST['submit_commentaire'])) {
+        
       if(isset($_POST['commentaire']) AND !empty($_POST['commentaire'])) {
          $commentaire = htmlspecialchars($_POST['commentaire']);
           
@@ -27,8 +28,9 @@ if (isset($_SESSION['id'])){
       } else {
          $c_msg = "Erreur: Le champs commentaire doit être complété";
       }
-        header('Location: confirmation.php');
-             exit;
+        header('Location: actor.php?id_actor='.$_POST['id_actor']);
+        
+             
    }
 
 ?>
@@ -57,8 +59,7 @@ if (isset($_SESSION['id'])){
                    <div id="content">
                        <h1>COMMENTAIRE</h1>
                        	<form method="POST">
-                            <p><?php echo "$id_user $id_actor"; ?></p>
-                            
+                            <input type="hidden" value="<?php echo $id_actor ?>" name="id_actor">
    <textarea name="commentaire" placeholder="Votre commentaire..."></textarea><br />
    <input type="submit" value="Poster mon commentaire" name="submit_commentaire" />
 </form>
