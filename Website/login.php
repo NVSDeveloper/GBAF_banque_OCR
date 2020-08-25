@@ -1,6 +1,8 @@
 <?php
 include('require/bdd.php');
+//Verifier si la personne est déjà connecter. Si oui, rediriger vers la page index.php
 if (!isset($_SESSION['id'])){
+    //Si les deux champs sont remplis, mettre dans des variables les valeurs entrées
     if (!empty($_POST['username']) && !empty($_POST['password'])) {
         
     $username = htmlspecialchars(trim($_POST["username"]));
@@ -9,7 +11,7 @@ if (!isset($_SESSION['id'])){
     $req_user->execute([$username]);
     $result = $req_user->fetch();
    
-        
+    //Si le nom d'utilisateur correspont à un utilisateur enregister et si le mot de passe correspond, connecter la personne en créent une session.
     if ($username == $result['username']){
         
         if(password_verify($_POST['password'], $result['password'])){
@@ -37,40 +39,47 @@ if (!isset($_SESSION['id'])){
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+    
     <head>
+        
         <meta charset="utf-8">
         <title>GBAF</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
-        <link rel="stylesheet"  type="text/css" href="css/offline.css">
+        <link rel="stylesheet"  type="text/css" href="css/main.css">
+        
     </head>
+    
     <body>
-           <div id="frame">
-               <header>
-                   <img src="img/logo.png" alt="logo">
-               </header>
-               <section id="content">
-                   <div class="champs">
-                       <h1>CONNEXION</h1>
-                       <form action="login.php" method="post">
-                       <label>Nom d'utilisateur : <span class="ast">*</span></label><br>
-                       <input type="text" name="username" required><br>
-                       <label>Mot de passe : <span class="ast">*</span></label><br>
-                       <input type="password" name="password" required><br>
-                           <label>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</label><br>
-                           <input type="submit" id='submit' value='CONNEXION' ><br>
+        
+        <?php require "./require/header-off.php"; ?>
+        
+        <main id="main-off">
+            
+            <img src="./img/login.png">
+            
+            
+                <form action="login.php" method="post">
+                   <div class="champs">        
+                    <label>Nom d'utilisateur : <span class="ast">*</span></label><br>
+                    <input type="text" name="username" placeholder="Dupont" required><br>
+                   </div>   
+                    <div class="champs">
+                    <label>Mot de passe : <span class="ast">*</span></label><br>
+                    <input type="password" name="password" placeholder="***********" required><br>
+                    </div>       
+                    <a href="forgot.php">Mot de passe oublié ?</a>
+                   
+                    <input type="submit" id='submit' value='CONNEXION' ><br>
                            
-                               
-                        <a href="register.php">S'inscrire</a>
-                        <a href="forgot.php">Mot de passe oublié ?</a>
-                           
-                        </form>
-                   </div>
-               </section>
-               <footer>
-                   <p>Copyright 2020 | <a href="mention.php">Mentions légales</a></p>
-               </footer>
-           </div>
-
+                </form>
+            
+            <a id="register" href="register.php">INSCRIPTION</a>
+            
+            <label>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</label><br>
+        </main>
+        
+        <?php require "./require/footer.php"; ?>
+        
     </body>
 
 </html>

@@ -6,7 +6,9 @@ include('require/bdd.php'); // Fichier PHP contenant la connexion à votre BDD
 if (isset($_SESSION['id'])){
     $id = $_SESSION['id'];
     $nom = $_SESSION['nom'];
+    $nom = strtoupper($nom);
     $prenom = $_SESSION['prenom'];
+    $prenom = strtoupper($prenom);
     $username = $_SESSION['username'];
     $question = $_SESSION['question'];
     $reponse = $_SESSION['reponse'];
@@ -48,11 +50,6 @@ if(!empty($_POST)){
         exit;
         }
     }
-
-
-    
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,31 +57,34 @@ if(!empty($_POST)){
         <meta charset="utf-8">
         <title>GBAF</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
-        <link rel="stylesheet"  type="text/css" href="css/offline.css">
+        <link rel="stylesheet"  type="text/css" href="css/main.css">
     </head>
     <body>
-           <div id="frame">
-               <header>
-                   <img src="img/logo.png">
-               </header>
-               <section id="content">
-            
-                   <div class="champs">
+        <?php require "./require/header.php"; ?>
+        <a href="<?php echo $_SERVER['HTTP_REFERER'];?>"><img class="icon" id="return" src="../img/return.png"></a>
+        
+           <main id="main-off">
+                <img src="./img/login.png">
                        <h1>MON COMPTE</h1>
                        
                        <form  method="post" >
+                           <div class="champs"> 
                         <label>Nom : <span class="ast">*</span></label>
                             <input type="text" value="<?php echo "$nom"; ?>" name="nom"  required>
-                        
+                        </div>
+                        <div class="champs">
                         <label>Prénom : <span class="ast">*</span></label>
                             <input type="text" value="<?php echo "$prenom"; ?>" name="prenom"  required>
-                        
+                        </div>
+                        <div class="champs">
                         <label>Nom d'utilisateur : <span class="ast">*</span></label>
                             <input type="text"  value="<?php echo "$username"; ?>" name="username"  required>
-                        
+                        </div>
+                        <div class="champs">
                         <label>Mot de passe : <span class="ast">*</span></label>
                             <input type="password" placeholder="Entrer le mot de passe" name="password"  required>
-                        
+                        </div>
+                        <div class="champs">
                         <label for="question">Question Secrète : <span class="ast">*</span></label>
                             <select id="question" name="question"  >
                                 <option selected disabled ><?php echo "$question"; ?></option>
@@ -93,22 +93,18 @@ if(!empty($_POST)){
                                 <option value="Quel est le nom de votre ville natal ?">Quel est le nom de votre ville natal ?</option>
                                 <option value="Quel est le nom de votre meilleur/e ami/e ?">Quel est le nom de votre meilleur/e ami/e ?</option>
                             </select>
-                        
+                        </div>
+                        <div class="champs">
                         <label>Réponse : <span class="ast">*</span></label>
                             <input type="text" value="<?php echo "$reponse"; ?>" name="reponse"  required>
-                           <p>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</p>
+                           
+                           </div>
+                            
                            <input type="submit" id='submit' name="update "value="MODIFIER" >
-                           <a href="index.php">RETOUR</a>
                 </form>
-                       
-                   </div>
-                    
-               </section>
-               <footer>
-                   <p>Copyright 2020 | <a href="mention.php">Mentions légales</a></p>
-               </footer>
-           </div>
-
+              <p>Tout les champs avec un  <span class="ast">*</span> sont obligatoire !</p>
+           </main>
+        <?php require "./require/footer.php"; ?>
     </body>
 
 </html>
