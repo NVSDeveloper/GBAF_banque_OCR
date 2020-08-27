@@ -96,7 +96,7 @@ if(!empty($_POST)){
                         </div>
                         <div class="champs">
                         <label>Réponse : <span class="ast">*</span></label>
-                            <input type="text" value="<?php echo "$reponse"; ?>" name="reponse"  required>
+                            <input type="text" value="réponse" name="reponse"  required>
                            
                            </div>
                             
